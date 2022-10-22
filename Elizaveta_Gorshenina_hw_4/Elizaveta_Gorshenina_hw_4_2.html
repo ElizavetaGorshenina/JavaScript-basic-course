@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework</title>
+</head>
+<body>
+<!--
+Необязательное задание, но желательно сделать.
+
+Необходимо данное задание выполнить в es5 стиле и в es6 стиле.
+Необходимо создать функцию-конструктор/класс для поста в социальной сети.
+Названия: `PostES5` для es5 стиля и `PostES6` для es6 стиля.
+Пост должен хранить:
+1. Автора поста (имени достаточно).
+2. Текст поста.
+3. Дату и время последнего изменения поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Каждому экземпляру объекта должен быть доступен метод `edit`, который будет
+менять текст поста.
+
+---
+
+Необходимо создать функцию-конструктор/класс для закрепленного поста в
+социальной сети.
+Названия: `AttachedPostES5` для es5 стиля и `AttachedPostES6` для es6 стиля.
+Закрепленный пост должен наследоваться от обычного поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Закрепленный пост должен иметь свойство `highlighted`, в котором по умолчанию
+будет лежать значение false (это свойство будет обозначать, будет ли наш
+закрепленный пост подсвечен).
+У экземпляров объекта закрепленного поста должен быть метод с названием
+`makeTextHighlighted`, который сделает так, чтобы наш пост стал подсвеченным
+(будет менять свойство `highlighted`).
+
+---
+
+Подсказки:
+1. Задание сложное, советую делать по аналогии с примером на онлайн-занятии.
+2. Обратите внимание что пост хранит "дату и время последнего изменения
+поста", это значит что если пост кто-то изменит (например вызовет какой-то
+метод, который изменит что-то в посте), дата и время последнего изменения
+поста также должна измениться.
+3. Выполняйте все по порядку, не стоит пытаться сделать все сразу, иначе можно
+что-нибудь пропустить.
+4. Если непонятно условие - задайте вопрос.
+-->
+<script>
+  "use strict";
+
+  function PostES5(postAuthor, text) {
+    this.postAuthor = postAuthor;
+    this.text = text;
+    this.dateAndTime = new Date();
+  }
+
+  PostES5.prototype.edit = function(newText) {
+    this.text = newText;
+    this.dateAndTime = new Date();
+  };
+
+  function AttachedPostES5(postAuthor, text) {
+    PostES5.call(this, postAuthor, text);
+    this.highlighted = false;
+  }
+
+  AttachedPostES5.prototype = Object.create(PostES5.prototype);
+  AttachedPostES5.prototype.constructor = AttachedPostES5;
+  AttachedPostES5.prototype.makeTextHighlighted = function() {
+    this.highlighted = true;
+  };
+  
+  const aPostES5 = new PostES5('Вадим', 'Всем привет!');
+  console.log(`Пост, который опубликовал ${aPostES5.postAuthor}: "${aPostES5.text}", дата публикации: ${aPostES5.dateAndTime}.`);
+  aPostES5.edit('Привет, друзья!');
+  console.log(`Пост, который опубликовал ${aPostES5.postAuthor} после изменения: "${aPostES5.text}, дата изменения: ${aPostES5.dateAndTime}.`);
+  
+  const anAttachedPostES5 = new AttachedPostES5('Игорь', 'Отдыхаю');
+  console.log(`Пост, который закрепил ${anAttachedPostES5.postAuthor}: "${anAttachedPostES5.text}", дата публикации: ${anAttachedPostES5.dateAndTime}. Статус подсветки: ${anAttachedPostES5.highlighted}.`);
+  anAttachedPostES5.edit('Отдыхаю ♫');
+  console.log(`Пост, который закрепил ${anAttachedPostES5.postAuthor} после изменения: "${anAttachedPostES5.text}", дата изменения: ${anAttachedPostES5.dateAndTime}. Статус подсветки: ${anAttachedPostES5.highlighted}.`);
+  anAttachedPostES5.makeTextHighlighted();
+  console.log(`Статус подсветки изменен на: "${anAttachedPostES5.highlighted}".`);
+  console.log(`Функция-конструктор, использованная для создания объекта "anAttachedPostES5": ${anAttachedPostES5.constructor}`);
+
+  class PostES6 {
+    constructor(postAuthor, text){
+      this.postAuthor = postAuthor;
+      this.text = text;
+      this.dateAndTime = new Date();
+    }
+
+    edit(newText) {
+      this.text = newText;
+      this.dateAndTime = new Date();
+    }
+  }
+
+  class AttachedPostES6 extends PostES6 {
+    constructor(postAuthor, text){
+      super(postAuthor, text);
+      this.highlighted = false;
+    }
+
+    makeTextHighlighted() {
+      this.highlighted = true;
+    }
+  }
+
+  const aPostES6 = new PostES6('Анна', 'Собираюсь на вечеринку');
+  console.log(`Пост, который опубликовала ${aPostES6.postAuthor}: "${aPostES6.text}", дата публикации: ${aPostES6.dateAndTime}.`);
+  aPostES6.edit('Планы изменились');
+  console.log(`Пост, который опубликовала ${aPostES6.postAuthor} после изменения: "${aPostES6.text}", дата изменения: ${aPostES6.dateAndTime}.`);
+  
+  const anAttachedPostES6 = new AttachedPostES6('Евгения', 'Отдам котят в добрые руки');
+  console.log(`Пост, который закрепила ${anAttachedPostES6.postAuthor}: "${anAttachedPostES6.text}", дата публикации: ${anAttachedPostES6.dateAndTime}. Статус подсветки: ${anAttachedPostES6.highlighted}.`);
+  anAttachedPostES6.edit('Отдам двух котят в добрые руки');
+  console.log(`Пост, который закрепила ${anAttachedPostES6.postAuthor} после изменения: "${anAttachedPostES6.text}", дата изменения: ${anAttachedPostES6.dateAndTime}. Статус подсветки: ${anAttachedPostES6.highlighted}.`);
+  anAttachedPostES6.makeTextHighlighted();
+  console.log(`Статус подсветки изменен на: "${anAttachedPostES6.highlighted}".`);
+
+</script>
+</body>
+</html>
